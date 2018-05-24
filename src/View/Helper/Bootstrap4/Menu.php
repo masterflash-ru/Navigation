@@ -1,9 +1,9 @@
 <?php
 /**
- * ZfcTwitterBootstrap
+ * 
  */
 
-namespace Mf\Navigation\Service;
+namespace Mf\Navigation\View\Helper\Bootstrap4;
 
 use RecursiveIteratorIterator;
 use Zend\Navigation\AbstractContainer;
@@ -12,7 +12,7 @@ use Zend\Navigation\Page\Mvc;
 use Zend\View\Helper\Navigation\Menu as ZendMenu;
 
 /**
- * Helper for rendering menus from navigation containers
+ * 
  */
 class Menu extends ZendMenu
 {
@@ -47,7 +47,9 @@ class Menu extends ZendMenu
         $escapeLabels,
         $addClassToListItem,
         $liActiveClass
-    ): string {
+    )
+    
+    {
         $html = '';
 
         // find deepest active
@@ -186,7 +188,7 @@ class Menu extends ZendMenu
      * @param  bool $isChild Whether or not to add the page class to the list item
      * @return string
      */
-    public function htmlify(AbstractPage $page, $escapeLabel = true, $isChild = false): string
+    public function htmlify(AbstractPage $page, $escapeLabel = true, $isChild = false)
     {
         // get attribs for element
         $attribs = [
@@ -199,6 +201,7 @@ class Menu extends ZendMenu
 
         if (!$isChild && $page->hasPages()) {
             $attribs['data-toggle'] = 'dropdown';
+            $attribs['role'] = 'button';
             $class[] = 'dropdown-toggle';
         }
 
@@ -236,5 +239,9 @@ class Menu extends ZendMenu
         $html .= '</' . $element . '>';
 
         return $html;
+    }
+    public function setOptions()
+    {
+        echo "!";
     }
 }

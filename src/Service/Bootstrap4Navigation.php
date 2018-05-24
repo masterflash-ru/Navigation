@@ -1,16 +1,18 @@
 <?php
 /**
- * Прокси для генерации Bootstrap4
+ * Прокси для генерации разных элементов
  */
 
 namespace Mf\Navigation\Service;
 
 use Zend\View\Helper\Navigation as ZendNavigation;
 
+use Mf\Navigation\View\Helper\Bootstrap4;
+
 /**
  * Navigation
  */
-class Navigation extends ZendNavigation
+class Bootstrap4Navigation extends ZendNavigation
 {
     /**
      * Default proxy to use in {@link render()}
@@ -26,7 +28,7 @@ class Navigation extends ZendNavigation
      */
     protected $defaultPluginManagerHelpers
         = [
-            'menu'        => Menu::class,
+            'menu'        => Bootstrap4\Menu::class,
         ];
 
     /**
@@ -37,7 +39,7 @@ class Navigation extends ZendNavigation
      *
      * @return \Zend\View\Helper\Navigation\PluginManager
      */
-    public function getPluginManager(): ZendNavigation\PluginManager
+    public function getPluginManager()
     {
         $pm = parent::getPluginManager();
         foreach ($this->defaultPluginManagerHelpers as $name => $invokableClass) {
