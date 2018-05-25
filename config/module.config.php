@@ -22,10 +22,4 @@ return [
             "bootstrap4Navigation" => Service\Bootstrap4Navigation::class,
         ],
     ],
-    'view_manager' => [
-        'template_path_stack' => [
-            __DIR__ . '/../view',
-        ],
-    ],
-
 ];
