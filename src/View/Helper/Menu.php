@@ -64,47 +64,57 @@ public function __construct ($connection,$cache,$container)
 * пустой массив, по умолчанию используется стандартный помощник ZF3
 * 
 */
-public function __invoke($sysname,array $options=[])
+public function __invoke($sysname=null,array $options=[])
 {
-    $menu_type=array_keys($options);
-    
-    if (empty($menu_type)){
-        $menu_type="zf3";
-        $options=$this->_default[$menu_type];
+    if (empty($sysname)){
+        return $this;
+    }
+    /*извлекаем локаль, если есть*/
+    if (!empty($options["locale"])){
+        $locale=$options["locale"];
     } else {
-        $menu_type=strtolower($menu_type[0]);
-        if (!isset($this->_default[$menu_type])) {
-            throw new  Exception("Не допустимый тип навигации $menu_type");
-        }
-        if (!isset($options[$menu_type]) || !is_array($options[$menu_type])) {
-            throw new  Exception("Не допустимые параметры для генерации навигации");
-        }
-
-        $options=array_replace_recursive($this->_default[$menu_type],$options[$menu_type]);
+        $locale="ru_RU";
     }
     
-    $options["menu_type"]=$menu_type;
-    
     /*получить массив для передачи его в Navigation*/
-    $menu=$this->getMenu($sysname,$options["locale"]);
-    $factory    = new ConstructedNavigationFactory($menu);
-    $navigation = $factory->createService($this->container);
+    $pages=$this->getMenu($sysname,$locale);
+    /*генерируем объект Navigation от ZF3*/
+    $navigation = $this->createNavigation($pages);
     return $this->render($navigation,$options);
+}
+
+/*
+* генерирует объект Navigation 
+* $menu - массив страниц, пригодный для генерации Navigation
+* возвращает Navigation с контейнером
+* возвращает Navigation с контейнером
+*/
+public function createNavigation($pages)
+{
+    $factory    = new ConstructedNavigationFactory($pages);
+    return $factory->createService($this->container);
 }
 
 /*
 * рендеринг меню с опциями
 * $navigation - контейнер с навигацией (Zend\Navigation\Navigation)
-* $options - массив опций (см.дефолтные) - все должно быть присвоено!
+* $options - массив опций (см.дефолтные), например,
+* array ("bootstrap4"=>[
+            "locale"=>"ru_RU",               //имя локали
+            "ulClass"=>"nav",                //класс для ul элемента
+            "indent"=>"",                    //идентификатор, обязательно если несколько меню на сайте
+            "minDepth"=>0,                   //минимальный уровень вывода
+            "maxDepth"=>null,                //максимальный уровень
+            "liActiveClass"=>"active",       //имя класса для активного пункта
+            "escapeLabels"=>true,            //экранировать метки да/нет
+            "addClassToListItem"=>false,
+            "OnlyActiveBranch"=>false,
+            "tpl"=>null,
+        ])
 */
 public function render(ZFNavigation $navigation,array $options)
 {
-    $menu_type=array_keys($options);
-    if (empty($menu_type[0])){
-        $menu_type[0]="zf3";
-    }
-    $menu_type=strtolower($menu_type[0]);
-
+    $options=$this->normalizeOptions($options);
     $view=$this->getView();
     if ($options["menu_type"]=="zf3"){
         /*стандартный из ZF3 прокси navigation*/
@@ -113,7 +123,6 @@ public function render(ZFNavigation $navigation,array $options)
         /*подменный прокси, в котором прописаны разные виды генерации*/
         $nav_proxy=$options["menu_type"]."Navigation";
     }
-
 
     $nav=$view->$nav_proxy();
 
@@ -210,6 +219,30 @@ return $mvc;
 }
 
 
+/*
+* нормализация опций, возвращаются опции дополненные значениями по умолчанию 
+* возвращает нормализованный массив опций
+*/
+public function normalizeOptions(array $options)
+{
+    $menu_type=array_keys($options);
+    
+    if (empty($menu_type)){
+        $menu_type="zf3";
+        $options=$this->_default[$menu_type];
+    } else {
+        $menu_type=strtolower($menu_type[0]);
+        if (!isset($this->_default[$menu_type])) {
+            throw new  Exception("Не допустимый тип навигации $menu_type");
+        }
+        if (!isset($options[$menu_type]) || !is_array($options[$menu_type])) {
+            throw new  Exception("Не допустимые параметры для генерации навигации");
+        }
 
-
+        $options=array_replace_recursive($this->_default[$menu_type],$options[$menu_type]);
+    }
+    
+    $options["menu_type"]=$menu_type;
+    return $options;
+}
 }
