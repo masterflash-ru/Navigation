@@ -1,13 +1,13 @@
 {
     "name": "masterflash-ru/navigation",
-    "description": "Генератор навигационных элементов",
+    "description": "Генератор навигационных элементов разных стандартов",
     "type": "Service",
     "license": "BSD-3-Clause",
     "keywords": [
         "masterflash",
         "simba"
     ],
-    "homepage": "https://masterflash.ru/",
+    "homepage": "https://www.masterflash.ru/",
     "minimum-stability": "dev",
     "prefer-stable": true,
     "require": {

@@ -1,6 +1,7 @@
 <?php
 /*
-помощник view для вывода навигационных элементов
+* помощник view для вывода навигационных элементов
+* при необходимости его можно расширить новым объектом для генерации меню из каталога, например.
 */
 
 namespace Mf\Navigation\View\Helper;
@@ -8,6 +9,7 @@ namespace Mf\Navigation\View\Helper;
 use Zend\View\Helper\AbstractHelper;
 use ADO\Service\RecordSet;
 use Zend\Navigation\Service\ConstructedNavigationFactory;
+use Zend\Navigation\Navigation as ZFNavigation;
 use Mf\Navigation;
 use Exception;
 
@@ -47,11 +49,55 @@ class Menu extends AbstractHelper
         ],
     ];
 
+/*конструктор
+*параметры передаются из фабрики
+*/
+public function __construct ($connection,$cache,$container)
+  {
+    $this->connection=$connection;
+    $this->cache=$cache;
+    $this->container=$container;
+  }
+
 /*
 *$options - массив опций (см. выше дефолтные объявления), 
+* пустой массив, по умолчанию используется стандартный помощник ZF3
 * 
 */
 public function __invoke($sysname,array $options=[])
+{
+    $menu_type=array_keys($options);
+    
+    if (empty($menu_type)){
+        $menu_type="zf3";
+        $options=$this->_default[$menu_type];
+    } else {
+        $menu_type=strtolower($menu_type[0]);
+        if (!isset($this->_default[$menu_type])) {
+            throw new  Exception("Не допустимый тип навигации $menu_type");
+        }
+        if (!isset($options[$menu_type]) || !is_array($options[$menu_type])) {
+            throw new  Exception("Не допустимые параметры для генерации навигации");
+        }
+
+        $options=array_replace_recursive($this->_default[$menu_type],$options[$menu_type]);
+    }
+    
+    $options["menu_type"]=$menu_type;
+    
+    /*получить массив для передачи его в Navigation*/
+    $menu=$this->getMenu($sysname,$options["locale"]);
+    $factory    = new ConstructedNavigationFactory($menu);
+    $navigation = $factory->createService($this->container);
+    return $this->render($navigation,$options);
+}
+
+/*
+* рендеринг меню с опциями
+* $navigation - контейнер с навигацией (Zend\Navigation\Navigation)
+* $options - массив опций (см.дефолтные) - все должно быть присвоено!
+*/
+public function render(ZFNavigation $navigation,array $options)
 {
     $menu_type=array_keys($options);
     if (empty($menu_type[0])){
@@ -59,36 +105,13 @@ public function __invoke($sysname,array $options=[])
     }
     $menu_type=strtolower($menu_type[0]);
 
-    /*сливаем конфиг с дефолтным, если есть*/
-    if (!isset($this->_default[$menu_type])) {
-        throw new  Exception("Не допустимый тип навигации $menu_type");
-    }
-    $options=array_replace_recursive($this->_default[$menu_type],$options);
-    $result = false;
-    $key="Menu_".preg_replace('/[^0-9a-zA-Z_\-]/iu', '',$sysname)."_{$options["locale"]}";
-
-    $menu = $this->cache->getItem($key, $result);
-    if (!$result){
-       $this->rs=new RecordSet();
-      $this->rs->MaxRecords=0; 
-      $this->rs->CursorType = adOpenKeyset;
-      $this->rs->open("select * from menu where sysname='{$sysname}' and locale='{$options["locale"]}' order by poz",$this->connection);
-
-      $menu=$this->create_menu_tree(0);
-      $this->cache->setItem($key, $menu);
-      $this->cache->setTags($key,["menu"]);
-    }
-    
-    $factory    = new ConstructedNavigationFactory($menu);
-    $navigation = $factory->createService($this->container);
-    
     $view=$this->getView();
-    if ($menu_type=="zf3"){
+    if ($options["menu_type"]=="zf3"){
         /*стандартный из ZF3 прокси navigation*/
         $nav_proxy="Navigation";
     } else {
         /*подменный прокси, в котором прописаны разные виды генерации*/
-        $nav_proxy=$menu_type."Navigation";
+        $nav_proxy=$options["menu_type"]."Navigation";
     }
 
 
@@ -112,42 +135,60 @@ public function __invoke($sysname,array $options=[])
   } 
     //стандартный рендер меню
     return $nav->setPartial(null)->render();
+
 }
+/*
+* получить из базы меню данного имени и сгенерировать дерево в виде массива
+* $sysname - системное имя меню,
+* $locale - локаль, например, ru_RU
+* возвращает массив пригодный для передачи его в Navigation
+* результирующий массив кешируется
+*/
+public function getMenu($sysname,$locale)
+{
+    $result = false;
+    $key="Menu_".preg_replace('/[^0-9a-zA-Z_\-]/iu', '',$sysname)."_{$locale}";
 
+    $menu = $this->cache->getItem($key, $result);
+    if (!$result){
+       $this->rs=new RecordSet();
+      $this->rs->MaxRecords=0; 
+      $this->rs->CursorType = adOpenKeyset;
+      $this->rs->open("select * from menu where sysname='{$sysname}' and locale='{$locale}' order by poz",$this->connection);
 
-
-public function __construct ($connection,$cache,$container)
-  {
-    $this->connection=$connection;
-    $this->cache=$cache;
-    $this->container=$container;
-  }
+      $menu=$this->createPageTree(0);
+      $this->cache->setItem($key, $menu);
+      $this->cache->setTags($key,["menu"]);
+    }
+    return $menu;
+}
+    
 
 
 
 
 /*обход дерева с данного узла (на него указывает RS
-возвращает массив пригодный для генерации\Navigation
+* возвращает массив пригодный для генерации\Navigation
 */
-public function create_menu_tree($subid)
+public function createPageTree($subid)
 {
   $rs1 =clone $this->rs;
   if ($rs1->EOF) return [];
   $rs1->Filter="subid=".$subid;
   $pages=array();
   while (!$rs1->EOF) {
-    $subpages=$this->create_menu_tree($rs1->Fields->Item['id']->Value);
-    $pages[]=$this->create_menu_element($rs1,$subpages);
+    $subpages=$this->createPageTree($rs1->Fields->Item['id']->Value);
+    $pages[]=$this->createPageElement($rs1,$subpages);
     $rs1->MoveNext();
   }
 return $pages;
 }
 
 /*
-генерирует массив для одного элемента меню, пригодного для 
-добавления в массив и передачи его в \Navigation
+* генерирует массив для одного элемента меню, пригодного для 
+* добавления в массив и передачи его в Navigation
 */
-protected function create_menu_element(Recordset $rs,$subpages=NULL)
+protected function createPageElement(Recordset $rs,$subpages=NULL)
 {
     $mvc=array();
     $mvc["label"]=$rs->Fields->Item['label']->Value;
