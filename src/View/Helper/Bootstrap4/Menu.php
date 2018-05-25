@@ -240,8 +240,4 @@ class Menu extends ZendMenu
 
         return $html;
     }
-    public function setOptions()
-    {
-        echo "!";
-    }
 }
