@@ -29,6 +29,7 @@ class Bootstrap4Navigation extends ZendNavigation
     protected $defaultPluginManagerHelpers
         = [
             'menu'        => Bootstrap4\Menu::class,
+            'breadcrumbs' => Bootstrap4\Breadcrumbs::class,
         ];
 
     /**
