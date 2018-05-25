@@ -85,11 +85,10 @@ public function __invoke($sysname=null,array $options=[])
 
 /*
 * генерирует объект Navigation 
-* $menu - массив страниц, пригодный для генерации Navigation
-* возвращает Navigation с контейнером
+* $pages - массив (пока) страниц, пригодный для генерации Navigation
 * возвращает Navigation с контейнером
 */
-public function createNavigation($pages)
+public function createNavigation(array $pages)
 {
     $factory    = new ConstructedNavigationFactory($pages);
     return $factory->createService($this->container);
@@ -136,7 +135,6 @@ public function render(ZFNavigation $navigation,array $options)
         ->setaddClassToListItem($options["addClassToListItem"])
         ->setOnlyActiveBranch($options["OnlyActiveBranch"]);
 
-
   if(!empty($options["tpl"]) ){
     //если указан шаблон, то применим его
     return $nav->setPartial($options["tpl"])
@@ -144,7 +142,6 @@ public function render(ZFNavigation $navigation,array $options)
   } 
     //стандартный рендер меню
     return $nav->setPartial(null)->render();
-
 }
 /*
 * получить из базы меню данного имени и сгенерировать дерево в виде массива
@@ -172,10 +169,6 @@ public function getMenu($sysname,$locale)
     return $menu;
 }
     
-
-
-
-
 /*обход дерева с данного узла (на него указывает RS
 * возвращает массив пригодный для генерации\Navigation
 */
@@ -217,7 +210,6 @@ protected function createPageElement(Recordset $rs,$subpages=NULL)
   if (!empty($subpages) && is_array($subpages)) {$mvc['pages']=$subpages;}
 return $mvc;
 }
-
 
 /*
 * нормализация опций, возвращаются опции дополненные значениями по умолчанию 
