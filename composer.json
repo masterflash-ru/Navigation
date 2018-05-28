@@ -15,6 +15,9 @@
         "masterflash-ru/ado": "^1.0",
         "zendframework/zend-navigation": "^2.8"
     },
+    "conflict": {
+        "masterflash-ru/menu": "*"
+    },
     "autoload": {
         "psr-4": {
             "Mf\\Navigation\\": "src/"
