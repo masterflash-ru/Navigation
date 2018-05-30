@@ -12,6 +12,8 @@ use Zend\Navigation\Service\ConstructedNavigationFactory;
 use Zend\Navigation\Navigation as ZFNavigation;
 use Mf\Navigation;
 use Exception;
+use RecursiveArrayIterator;
+use RecursiveIteratorIterator;
 
 /**
  * помощник - вывода меню
@@ -157,58 +159,59 @@ public function getMenu($sysname,$locale)
 
     $menu = $this->cache->getItem($key, $result);
     if (!$result){
-       $this->rs=new RecordSet();
-      $this->rs->MaxRecords=0; 
-      $this->rs->CursorType = adOpenKeyset;
-      $this->rs->open("select * from menu where sysname='{$sysname}' and locale='{$locale}' order by poz",$this->connection);
-
-      $menu=$this->createPageTree(0);
-      $this->cache->setItem($key, $menu);
-      $this->cache->setTags($key,["menu"]);
+        $rs=new RecordSet();
+        $rs->MaxRecords=0; 
+        $rs->CursorType = adOpenKeyset;
+        $rs->open("select * from menu where sysname='{$sysname}' and locale='{$locale}' order by poz",$this->connection);
+        
+        $array=[];
+        while (!$rs->EOF){
+            $r=[];
+            $r["id"]=$rs->Fields->Item["id"]->Value;
+            $r["subid"]=$rs->Fields->Item["subid"]->Value;
+            
+            $r["label"]=$rs->Fields->Item['label']->Value;
+            if ($rs->Fields->Item['url']->Value){
+                //если указан URL тогда он ставится, MVC игнорируется
+                $r["uri"]=$rs->Fields->Item['url']->Value;
+            } else {
+                $_mvc=$rs->Fields->Item['mvc']->Value;
+                if (!empty($_mvc)) {
+                    //если есть MVC тогда добавим текст элемента меню
+                    $r=array_merge($r,unserialize($_mvc));
+                } else {
+                    //если не указан MVC тогда пустая ссылка
+                    $r["uri"]="#";
+                }
+            }
+            
+            $array[]=$r;
+            $rs->MoveNext();
+        }
+        
+        $tree=[];
+        
+        foreach($array as $cat) {
+            $tree[$cat['id']] = $cat;
+            unset($tree[$cat['id']]['id']);
+        }
+        
+        $tree['0'] = array(
+            'subid' => '',
+            'label' => 'Корень',
+        );
+        
+        foreach ($tree as $id => $node) {
+            if (isset($node['subid']) && isset($tree[$node['subid']])) {
+                $tree[$node['subid']]['pages'][$id] =& $tree[$id];
+            }
+        }
+        //итоговое дерево
+        $menu= $tree[0]['pages'];
+        $this->cache->setItem($key, $menu);
+        $this->cache->setTags($key,["menu"]);
     }
     return $menu;
-}
-    
-/*обход дерева с данного узла (на него указывает RS
-* возвращает массив пригодный для генерации\Navigation
-*/
-public function createPageTree($subid)
-{
-  $rs1 =clone $this->rs;
-  if ($rs1->EOF) return [];
-  $rs1->Filter="subid=".$subid;
-  $pages=array();
-  while (!$rs1->EOF) {
-    $subpages=$this->createPageTree($rs1->Fields->Item['id']->Value);
-    $pages[]=$this->createPageElement($rs1,$subpages);
-    $rs1->MoveNext();
-  }
-return $pages;
-}
-
-/*
-* генерирует массив для одного элемента меню, пригодного для 
-* добавления в массив и передачи его в Navigation
-*/
-protected function createPageElement(Recordset $rs,$subpages=NULL)
-{
-    $mvc=array();
-    $mvc["label"]=$rs->Fields->Item['label']->Value;
-    if ($rs->Fields->Item['url']->Value){
-      //если указан URL тогда он ставится, MVC игнорируется
-      $mvc["uri"]=$rs->Fields->Item['url']->Value;
-  } else {
-        $_mvc=$rs->Fields->Item['mvc']->Value;
-        if (!empty($_mvc)) {
-        //если есть MVC тогда добавим текст элемента меню
-        $mvc=array_merge($mvc,unserialize($_mvc));
-      } else {
-        //если не указан MVC тогда пустая ссылка
-        $mvc["uri"]="#";
-    }
-  }
-  if (!empty($subpages) && is_array($subpages)) {$mvc['pages']=$subpages;}
-return $mvc;
 }
 
 /*
