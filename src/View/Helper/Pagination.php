@@ -24,6 +24,7 @@ class Pagination extends AbstractHelper
             "RouteValues" => [],                //Значения параметров в маршрут в виде ассоциативного массива
             "RoutePageParameterName"=>"page",   //имя параметра с номером страницы в маршруте
             "tpl"=>null,                        //внешний сценарий генерации номеров страниц
+            "QueryGetValues"=>[],               //параметры в строку запроса, то что будет после ?
         ],
         "bootstrap4"=>[ /*параметры стандарта bootstrap4*/
             "ScrollingStyle"=>"sliding",
@@ -32,6 +33,7 @@ class Pagination extends AbstractHelper
             "RouteValues" => [],
             "RoutePageParameterName"=>"page",
             "tpl"=>null,
+            "QueryGetValues"=>[],               //параметры в строку запроса, то что будет после ?
         ],
     ];
 
