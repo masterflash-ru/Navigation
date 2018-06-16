@@ -16,7 +16,7 @@ public function __invoke(array $pages, array $options=[])
         //<!-- Ссылка на предыдущую страницу -->
 
         if (isset($pages["previous"]) && $pages["previous"]>1) {
-                $pages_urls[]="<li class=\"page-item\"><a class=\"page-link\" href='".$view->url($options["RouteNamePages"],$options["RouteValues"],array_merge(array("page"=>pages["previous"])))."'>&laquo;</a></li>".PHP_EOL;
+                $pages_urls[]="<li class=\"page-item\"><a class=\"page-link\" href='".$view->url($options["RouteNamePages"],$options["RouteValues"],array_merge(array("page"=>$pages["previous"])))."'>&laquo;</a></li>".PHP_EOL;
             }else {
                 $pages_urls[]="<li class=\"disabled page-item\"><a class=\"page-link\" href=\"".$view->url($options["RouteNamePageStart"],$options["RouteValues"])."\">&laquo;</a></li>".PHP_EOL;
         }
