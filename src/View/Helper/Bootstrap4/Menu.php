@@ -169,7 +169,11 @@ class Menu extends ZendMenu
             // done iterating container; close open ul/li tags
             for ($i = $prevDepth + 1; $i > 0; $i--) {
                 $myIndent = $indent . str_repeat('        ', $i - 1);
-                $html .= $myIndent . '    </li>' . PHP_EOL . $myIndent . '</ul>' . PHP_EOL;
+                if ($i==1){
+                    $html .= $myIndent . '    </li>' . PHP_EOL . $myIndent . '</ul>' . PHP_EOL;
+                } else {
+                    $html .= $myIndent . '    </div>'. PHP_EOL ;
+                }
             }
             $html = rtrim($html, PHP_EOL);
         }
