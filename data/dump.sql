@@ -50,7 +50,7 @@ CREATE TABLE `menu` (
   `locale` char(20) NOT NULL COMMENT 'локаль',
   `sysname` char(50) NOT NULL DEFAULT '0' COMMENT 'имя меню',
   `label` char(255) NOT NULL,
-  `poz` int(11) NOT NULL DEFAULT '0',
+  `poz` int(11) DEFAULT NULL,
   `url` varchar(127) NOT NULL DEFAULT '',
   `mvc` char(255) DEFAULT NULL COMMENT 'состояние сайта в терминах роутеров Zend',
   PRIMARY KEY (`id`),
