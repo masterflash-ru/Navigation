@@ -34,8 +34,6 @@ if (!isset(self::$cache[$obj->pole_dop[0]]) )
 						}
 				}
 		}
-	
-
 return $infa;
 }
 
