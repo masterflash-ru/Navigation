@@ -34,4 +34,21 @@ return [
             'pagination' => View\Helper\Pagination::class,
         ],
     ],
+    /*описатели интерфейсов*/
+    "interface"=>[
+        "menu"=>__DIR__."/admin.menu.php",
+    ],
+    /*плагины для сетки JqGrid*/
+    "JqGridPlugin"=>[
+        'factories' => [
+            Service\Admin\JqGrid\Plugin\GetAdminUrls::class => Service\Admin\JqGrid\Plugin\FactoryGetAdminUrls::class,
+        ],
+    ],
+    /*плагины для ZformPlugin используется в сетке в toolbar*/
+    "ZformPlugin"=>[
+        'factories' => [
+            Service\Admin\Zform\Plugin\MenuNames::class => Service\Admin\Zform\Plugin\FactoryMenuNames::class,
+        ],
+    ],
+
 ];
