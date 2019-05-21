@@ -102,6 +102,7 @@ return [
                             'options'=>[
                                 "label"=>"Имя меню: "
                             ],
+                            "attributes"=>["onchange"=>"change_toolbar()"]
                         ]),
                     ],
                 ],

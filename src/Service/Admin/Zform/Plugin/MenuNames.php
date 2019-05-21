@@ -18,8 +18,8 @@ class MenuNames extends AbstractPlugin
  public function rowModel(array $rowModel,FormInterface $form)
  {
         $rez=[];
-        foreach ($this->config as $l){
-            $rez[$l]=$l;
+        foreach ($this->config as $k=>$l){
+            $rez[$k]=$l;
         }
         $colModel["editoptions"]["value"]=$rez;
      $form->get($rowModel["name"])->setValueOptions($rez);
