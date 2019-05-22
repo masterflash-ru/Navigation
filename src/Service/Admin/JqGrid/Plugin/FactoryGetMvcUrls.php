@@ -16,7 +16,7 @@ public function __invoke(ContainerInterface $container, $requestedName, array $o
 	$SharedEventManager=$container->get('SharedEventManager');
 	$SharedEventManager=new EventManager($SharedEventManager);
 	$SharedEventManager->addIdentifiers(["simba.admin"]);
-    $controllers_descriptions=$SharedEventManager->trigger("GetControllersInfoAdmin",NULL,["name"=>"","locale"=>"ru_RU","container"=>$container]);
+    $controllers_descriptions=$SharedEventManager->trigger("GetMvc",NULL,["category"=>"frontend"]);
 
     return new $requestedName($controllers_descriptions);
 }
