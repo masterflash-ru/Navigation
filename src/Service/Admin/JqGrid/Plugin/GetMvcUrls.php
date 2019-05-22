@@ -7,7 +7,7 @@ use Admin\Service\JqGrid\Plugin\AbstractPlugin;
 use Zend\Escaper\Escaper;
 
 
-class GetAdminUrls extends AbstractPlugin
+class GetMvcUrls extends AbstractPlugin
 {
 
     protected $controllers_descriptions;
@@ -39,12 +39,13 @@ class GetAdminUrls extends AbstractPlugin
     /**
     * преобразование элементов colModel, например, для генерации списков
     * $colModel - элемент $colModel из конфигурации
+    * $toolbarData - массив начальных данных из раздела toolbar
     * возвращает тот же $colModel, с внесенными изменениями
     */
-    public function colModel(array $colModel)
+    public function colModel(array $colModel,array $toolbarData=[])
     {
         $rez[""]="";
-        foreach ($this->controllers_descriptions as $name=>$desc){//\Zend\Debug\Debug::dump($desc);
+        foreach ($this->controllers_descriptions as $name=>$desc){
             //внутри контроллера
             if (is_array($desc)) {
                 foreach ($desc as $meta) {

@@ -41,13 +41,17 @@ return [
     /*плагины для сетки JqGrid*/
     "JqGridPlugin"=>[
         'factories' => [
-            Service\Admin\JqGrid\Plugin\GetAdminUrls::class => Service\Admin\JqGrid\Plugin\FactoryGetAdminUrls::class,
+            Service\Admin\JqGrid\Plugin\GetMvcUrls::class => Service\Admin\JqGrid\Plugin\FactoryGetMvcUrls::class,
+        ],
+        'aliases' => [
+            "GetMvcUrls"=>Service\Admin\JqGrid\Plugin\GetMvcUrls::class,
         ],
     ],
     /*плагины для ZformPlugin используется в сетке в toolbar*/
     "ZformPlugin"=>[
         'factories' => [
             Service\Admin\Zform\Plugin\MenuNames::class => Service\Admin\Zform\Plugin\FactoryMenuNames::class,
+            Service\Admin\Zform\Plugin\ToolBarInit::class => Service\Admin\Zform\Plugin\FactoryToolBarInit::class,
         ],
     ],
 

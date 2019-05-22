@@ -8,7 +8,7 @@ use Zend\EventManager\EventManager;
 
 */
 
-class FactoryGetAdminUrls
+class FactoryGetMvcUrls
 {
 
 public function __invoke(ContainerInterface $container, $requestedName, array $options = null)

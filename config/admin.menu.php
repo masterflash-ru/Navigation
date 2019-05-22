@@ -22,7 +22,7 @@ return [
                 "TreeAdjacency"=>[//плагин выборки из базы
                     "sql"=>"select t.*,
                         (not EXISTS(select id from menu as st where st.subid=t.id)) as isLeaf
-                            from menu as t where subid=:nodeid",
+                            from menu as t where subid=:nodeid and locale=':locale' and sysname=':sysname'",
                     "interface_name"=>"menu",
                 ],
             ],
@@ -81,33 +81,38 @@ return [
                 * все настройки как в Zform
                 */
                 "toolbar"=> [true,"top"],
-                "rowModel" => [
-                    'elements' => [
-                        RowModelHelper::select("locale",[
-                            "plugins"=>[
-                                "rowModel"=>[//плагин срабатывает при генерации формы до ее вывода
-                                    "Locale"=>[],
+                "toolbarModel"=>[
+                    "rowModel" => [
+                        'elements' => [
+                            RowModelHelper::select("locale",[
+                                "plugins"=>[
+                                    "rowModel"=>[//плагин срабатывает при генерации формы до ее вывода
+                                        "Locale"=>[],
+                                    ],
                                 ],
-                            ],
-                            'options'=>[
-                                "label"=>"Локаль: "
-                            ],
-                        ]),
-                        RowModelHelper::select("type",[
-                            "plugins"=>[
-                                "rowModel"=>[//плагин срабатывает при генерации формы до ее вывода
-                                    Service\Admin\Zform\Plugin\MenuNames::class=>[],
+                                'options'=>[
+                                    "label"=>"Локаль: "
                                 ],
-                            ],
-                            'options'=>[
-                                "label"=>"Имя меню: "
-                            ],
-                            "attributes"=>["onchange"=>"change_toolbar()"]
-                        ]),
+                                "attributes"=>["onchange"=>"change_toolbar()"]
+                            ]),
+                            RowModelHelper::select("sysname",[
+                                "plugins"=>[
+                                    "rowModel"=>[//плагин срабатывает при генерации формы до ее вывода
+                                        Service\Admin\Zform\Plugin\MenuNames::class=>[],
+                                    ],
+                                ],
+                                'options'=>[
+                                    "label"=>"Имя меню: "
+                                ],
+                                "attributes"=>["onchange"=>"change_toolbar()"]
+                            ]),
+                        ],
+                    ],
+                    "read"=>[//наолняет элементы toolbar начальными значениями
+                        Service\Admin\Zform\Plugin\ToolBarInit::class=>[ ],
                     ],
                 ],
-
-            
+        
                 "treeIcons"=>[
                     "plus"  =>"ui-icon-triangle-1-e",
                     "minus"=>"ui-icon-triangle-1-s",
@@ -135,8 +140,9 @@ return [
                     ColModelHelper::select("mvc",["label"=>"MVC Переход",
                                                   "width"=>"300",
                                                   "plugins"=>[
-                                                      "colModel"=>[Service\Admin\JqGrid\Plugin\GetAdminUrls::class=>[]], //вывод в форматтере select
-                                                      "ajaxRead"=>[Service\Admin\JqGrid\Plugin\GetAdminUrls::class=>[]], //подгрузка при редактированиив форме
+                                                      "colModel"=>["GetMvcUrls"=>[]], //вывод в форматтере select
+                                                      //поддерживается только псевдонимы!!!
+                                                      "ajaxRead"=>["GetMvcUrls"=>[]], //подгрузка при редактированиив форме
                                                       ],
                                                   ]),
                     ColModelHelper::text("url",["label"=>"Прямой переход",
