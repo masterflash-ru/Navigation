@@ -58,10 +58,6 @@ return [
                 ],
              ],
             
-            /*события, создаются в виде 
-            $("#<?=$options["container"]?>").bind("jqGridAddEditAfterSubmit", function () {  });
-            */
-
             /*внешний вид*/
             "layout"=>[
                 "caption" => "Меню сайта",
@@ -145,9 +141,14 @@ return [
                                                       "ajaxRead"=>["GetMvcUrls"=>[]], //подгрузка при редактированиив форме
                                                       ],
                                                   ]),
-                    ColModelHelper::text("url",["label"=>"Прямой переход",
-                                                  "width"=>"200",
-                                                  ]),
+                    ColModelHelper::text("url",
+                                         [
+                                             "label"=>"Прямой переход",
+                                             "width"=>"200",
+                                             "editoptions" => [
+                                                 "size" => 80,
+                                             ],
+                                         ]),
                     ColModelHelper::hidden("id"),
                 ],
             ],

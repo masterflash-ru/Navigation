@@ -31,9 +31,11 @@ class GetMvcUrls extends AbstractPlugin
             if (is_array($desc) && !empty($desc)) {
                 foreach ($desc as $meta) {
                     $r=[];
-                    foreach ($meta["urls"]["mvc"][$toolbarData["locale"]] as $k=>$item){
-                        $item=$escape->escapeHtmlAttr($item);
-                        $r[$item]=$meta["urls"]["name"][$toolbarData["locale"]][$k];
+                    if (isset($meta["urls"]["mvc"][$toolbarData["locale"]])){
+                        foreach ($meta["urls"]["mvc"][$toolbarData["locale"]] as $k=>$item){
+                            $item=$escape->escapeHtmlAttr($item);
+                            $r[$item]=$meta["urls"]["name"][$toolbarData["locale"]][$k];
+                        }
                     }
                     $rez[$meta["description"]]=$r;
                 }
@@ -55,10 +57,11 @@ class GetMvcUrls extends AbstractPlugin
             //внутри контроллера
             if (is_array($desc)) {
                 foreach ($desc as $meta) {//цикл по отдельным модулям
-                    foreach ($meta["urls"]["mvc"][$toolbarData["locale"]] as $k=>$item){
-                        $rez[$item]=$meta["description"].' -> '.$meta["urls"]["name"][$toolbarData["locale"]][$k];
+                    if (isset($meta["urls"]["mvc"][$toolbarData["locale"]])){
+                        foreach ($meta["urls"]["mvc"][$toolbarData["locale"]] as $k=>$item){
+                            $rez[$item]=$meta["description"].' -> '.$meta["urls"]["name"][$toolbarData["locale"]][$k];
+                        }
                     }
-                    
                 }
             }
         }
