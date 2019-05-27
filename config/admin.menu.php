@@ -149,6 +149,12 @@ return [
                                                  "size" => 80,
                                              ],
                                          ]),
+                    ColModelHelper::text("poz",
+                                         [
+                                             "label"=>"Порядок",
+                                             "width"=>150,
+                                         ]),
+
                     ColModelHelper::hidden("id"),
                 ],
             ],
