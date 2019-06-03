@@ -21,18 +21,25 @@ public function __invoke(array $pages, array $options=[])
         //<!-- Ссылка на предыдущую страницу -->
 
         if (isset($pages["previous"]) && $pages["previous"]>1) {
-                $pages_urls[]="<li class=\"page-item\"><a class=\"page-link\" href='".$view->url($options["RouteNamePages"],$options["RouteValues"],array_merge(array("page"=>$pages["previous"]))).$QueryGetValues."'>&laquo;</a></li>".PHP_EOL;
+                $pages_urls[]="<li class=\"page-item\"><a class=\"page-link\" href='".
+                    $view->url($options["RouteNamePages"],$options["RouteValues"],array_merge(array("page"=>$pages["previous"]))).$QueryGetValues.
+                    "'>&laquo;</a></li>".PHP_EOL;
             }else {
-                $pages_urls[]="<li class=\"disabled page-item\"><a class=\"page-link\" href=\"".$view->url($options["RouteNamePageStart"],$options["RouteValues"]).$QueryGetValues."\">&laquo;</a></li>".PHP_EOL;
+                $pages_urls[]="<li class=\"disabled page-item\"><a class=\"page-link\" href=\"".
+                    $view->url($options["RouteNamePageStart"],$options["RouteValues"]).$QueryGetValues.
+                    "\">&laquo;</a></li>".PHP_EOL;
         }
 
         //<!-- Нумерованные ссылки на страницы -->
         foreach ($pages["pagesInRange"] as $pageitem){
-            $url=$view->url($options["RouteNamePages"],array_merge(array("page"=>$pageitem),$options["RouteValues"])).$QueryGetValues;
+            //коррекция URL для первой страницы
+            if ($pageitem==1) {
+                $url=$view->url($options["RouteNamePageStart"],$options["RouteValues"]).$QueryGetValues;
+            } else {
+                $url=$view->url($options["RouteNamePages"],array_merge(array("page"=>$pageitem),$options["RouteValues"])).$QueryGetValues;
+            }
+
             if ($pageitem != $pages["current"]){
-                if ($pageitem==1) {
-                    $url=$view->url($options["RouteNamePageStart"],$options["RouteValues"]).$QueryGetValues;
-                }
                 $pages_urls[]="<li class=\"page-item\"><a class=\"page-link\" href=\"".$url."\">$pageitem</a></li>".PHP_EOL;
             } else {
                 $pages_urls[]="<li class=\"active page-item\"><a class=\"page-link\" href=\"".$url."\">$pageitem</a></li>".PHP_EOL;
@@ -41,7 +48,9 @@ public function __invoke(array $pages, array $options=[])
 
         //<!-- Ссылка на следующую страницу -->
         if (isset($pages["next"])){
-                $pages_urls[]="<li><a class=\"page-link\" href=\"".$view->url($options["RouteNamePages"],array_merge(array("page"=>$pages["next"]),$options["RouteValues"])).$QueryGetValues."\">&raquo;</a>".PHP_EOL;
+                $pages_urls[]="<li><a class=\"page-link\" href=\"".
+                    $view->url($options["RouteNamePages"],array_merge(array("page"=>$pages["next"]),$options["RouteValues"])).$QueryGetValues.
+                    "\">&raquo;</a>".PHP_EOL;
         } else {
                 $pages_urls[]="<li class=\"disabled page-item\"><a class=\"page-link\" href=\"#\">&raquo;</a></li>".PHP_EOL;
         }
