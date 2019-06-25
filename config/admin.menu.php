@@ -156,6 +156,7 @@ return [
                                          ]),
 
                     ColModelHelper::hidden("id"),
+                    ColModelHelper::cellActions("myaction",["formatoptions"=>["editformbutton"=>true]]),
                 ],
             ],
         ],
