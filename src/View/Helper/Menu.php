@@ -164,6 +164,8 @@ public function getMenu($sysname,$locale)
         $rs->CursorType = adOpenKeyset;
         $rs->open("select * from menu where sysname='{$sysname}' and locale='{$locale}' order by poz",$this->connection);
         
+        if ($rs->EOF){return [];}
+        
         $array=[];
         while (!$rs->EOF){
             $r=[];
