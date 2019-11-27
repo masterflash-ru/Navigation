@@ -1,7 +1,7 @@
 <?php
 namespace Mf\Navigation\Service\Admin\JqGrid\Plugin;
 
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use Zend\EventManager\EventManager;
 
 /*

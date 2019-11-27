@@ -1,7 +1,7 @@
 <?php
 namespace Mf\Navigation\Service\Admin\Zform\Plugin;
 
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 
 /*
 
