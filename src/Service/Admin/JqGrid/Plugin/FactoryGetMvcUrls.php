@@ -2,7 +2,7 @@
 namespace Mf\Navigation\Service\Admin\JqGrid\Plugin;
 
 use Interop\Container\ContainerInterface;
-use Zend\EventManager\EventManager;
+use Laminas\EventManager\EventManager;
 
 /*
 

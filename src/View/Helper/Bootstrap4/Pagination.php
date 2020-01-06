@@ -2,7 +2,7 @@
 
 namespace Mf\Navigation\View\Helper\Bootstrap4;
 
-use Zend\View\Helper\AbstractHelper;
+use Laminas\View\Helper\AbstractHelper;
 
 class Pagination extends AbstractHelper
 {

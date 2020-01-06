@@ -4,7 +4,7 @@
  */
 
 namespace Mf\Navigation;
-use Zend\ServiceManager\Factory\InvokableFactory;
+use Laminas\ServiceManager\Factory\InvokableFactory;
 
 return [
   /*конфиг по умолчанию, создайте аналогичный ключ в глобальном конфиге с нужными типами меню*/

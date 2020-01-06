@@ -4,7 +4,7 @@
 namespace Mf\Navigation\Service\Admin\JqGrid\Plugin;
 
 use Admin\Service\JqGrid\Plugin\AbstractPlugin;
-use Zend\Escaper\Escaper;
+use Laminas\Escaper\Escaper;
 
 
 class GetMvcUrls extends AbstractPlugin

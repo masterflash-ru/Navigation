@@ -11,9 +11,9 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "require": {
-        "php": "^7.0",
-        "masterflash-ru/ado": "^2.0",
-        "zendframework/zend-navigation": "^2.8"
+        "php": "^7.2",
+        "masterflash-ru/ado": "^2.2",
+        "laminas/laminas-navigation": "^2.8"
     },
     "conflict": {
         "masterflash-ru/menu": "*"

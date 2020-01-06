@@ -1,7 +1,7 @@
 <?php
 namespace Mf\Navigation\Service\Admin\Zform\Plugin;
 
-use Zend\Form\FormInterface;
+use Laminas\Form\FormInterface;
 use Admin\Service\Zform\Plugin\AbstractPlugin;
 
 class MenuNames extends AbstractPlugin

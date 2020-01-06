@@ -4,7 +4,7 @@
 
 namespace Mf\Navigation\View\Helper\Simba;
 
-use Zend\View\Helper\AbstractHelper;
+use Laminas\View\Helper\AbstractHelper;
 
 class Pagination extends AbstractHelper
 {

@@ -5,10 +5,10 @@
 
 namespace Mf\Navigation\View\Helper;
 
-use Zend\View\Helper\AbstractHelper;
+use Laminas\View\Helper\AbstractHelper;
 use ADO\Service\RecordSet;
-use Zend\Navigation\Service\ConstructedNavigationFactory;
-use Zend\Navigation\Navigation as ZFNavigation;
+use Laminas\Navigation\Service\ConstructedNavigationFactory;
+use Laminas\Navigation\Navigation as ZFNavigation;
 use Mf\Navigation;
 use Exception;
 
@@ -83,7 +83,7 @@ public function createNavigation(array $pages)
 
 /*
 * рендеринг меню с опциями
-* $navigation - контейнер с навигацией (Zend\Navigation\Navigation)
+* $navigation - контейнер с навигацией (Laminas\Navigation\Navigation)
 * $options - массив опций (см.дефолтные), например,
 * array ("bootstrap4"=>[
             "locale"=>"ru_RU",               //имя локали

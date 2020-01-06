@@ -4,7 +4,7 @@ namespace Mf\Navigation;
 
 use Mf\Migrations\AbstractMigration;
 use Mf\Migrations\MigrationInterface;
-use Zend\Db\Sql\Ddl;
+use Laminas\Db\Sql\Ddl;
 
 class Version20191104162641 extends AbstractMigration implements MigrationInterface
 {
@@ -22,7 +22,7 @@ class Version20191104162641 extends AbstractMigration implements MigrationInterf
         $table->addColumn(new Ddl\Column\Char('label', 255,true,null,["COMMENT"=>"Текст элемента"]));
         $table->addColumn(new Ddl\Column\Integer('poz',true,0,["COMMENT"=>"порядок"]));
         $table->addColumn(new Ddl\Column\Char('url', 255,true,null,["COMMENT"=>"URL"]));
-        $table->addColumn(new Ddl\Column\Char('mvc', 255,true,null,["состояние сайта в терминах роутеров Zend"]));
+        $table->addColumn(new Ddl\Column\Char('mvc', 255,true,null,["состояние сайта в терминах роутеров Laminas"]));
 
         $table->addConstraint(
             new Ddl\Constraint\PrimaryKey(['id'])

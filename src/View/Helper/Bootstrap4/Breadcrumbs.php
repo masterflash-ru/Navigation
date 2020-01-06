@@ -6,15 +6,15 @@
 namespace Mf\Navigation\View\Helper\Bootstrap4;
 
 use RecursiveIteratorIterator;
-use Zend\Navigation\AbstractContainer;
-use Zend\Navigation\Page\AbstractPage;
-use Zend\Navigation\Page\Mvc;
-use Zend\View\Helper\Navigation\Breadcrumbs as ZendBreadcrumbs;
+use Laminas\Navigation\AbstractContainer;
+use Laminas\Navigation\Page\AbstractPage;
+use Laminas\Navigation\Page\Mvc;
+use Laminas\View\Helper\Navigation\Breadcrumbs as LaminasBreadcrumbs;
 
 /**
  * 
  */
-class Breadcrumbs extends ZendBreadcrumbs
+class Breadcrumbs extends LaminasBreadcrumbs
 {
     /**
      * CSS class to use for the ol element
@@ -50,7 +50,7 @@ class Breadcrumbs extends ZendBreadcrumbs
         if ($this->getLinkLast()) {
             $html ='<li class="breadcrumb-item">'. $this->htmlify($active).'</li>'.  PHP_EOL;
         } else {
-            /** @var \Zend\View\Helper\EscapeHtml $escaper */
+            /** @var \Laminas\View\Helper\EscapeHtml $escaper */
             $escaper = $this->view->plugin('escapeHtml');
             $html    = '<li class="breadcrumb-item">'.$escaper(
                 $this->translate($active->getLabel(), $active->getTextDomain())

@@ -6,10 +6,10 @@
 
 namespace Mf\Navigation\View\Helper;
 
-use Zend\View\Helper\AbstractHelper;
+use Laminas\View\Helper\AbstractHelper;
 use ADO\Service\RecordSet;
-use Zend\Navigation\Service\ConstructedNavigationFactory;
-use Zend\Navigation\Navigation as ZFNavigation;
+use Laminas\Navigation\Service\ConstructedNavigationFactory;
+use Laminas\Navigation\Navigation as ZFNavigation;
 use Mf\Navigation;
 use Exception;
 use RecursiveArrayIterator;
@@ -27,7 +27,7 @@ class Menu extends AbstractHelper
     protected $_default=[
         "zf3"=>[/*стандартные параметры для встроенного в ZF3 генератора меню*/
             "locale"=>"ru_RU",               //имя локали
-            "ulClass"=>"navigation",         //класс для ul элемента (сдля стандартного ZEND меню)
+            "ulClass"=>"navigation",         //класс для ul элемента (сдля стандартного Laminas меню)
             "indent"=>"",
             "minDepth"=>0,                   //минимальный уровень вывода
             "maxDepth"=>null,                //максимальный уровень
@@ -98,7 +98,7 @@ public function createNavigation(array $pages)
 
 /*
 * рендеринг меню с опциями
-* $navigation - контейнер с навигацией (Zend\Navigation\Navigation)
+* $navigation - контейнер с навигацией (Laminas\Navigation\Navigation)
 * $options - массив опций (см.дефолтные), например,
 * array ("bootstrap4"=>[
             "locale"=>"ru_RU",               //имя локали

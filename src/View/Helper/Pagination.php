@@ -6,9 +6,9 @@
 
 namespace Mf\Navigation\View\Helper;
 
-use Zend\View\Helper\AbstractHelper;
-use Zend\View\Helper\PaginationControl;
-use Zend\Paginator;
+use Laminas\View\Helper\AbstractHelper;
+use Laminas\View\Helper\PaginationControl;
+use Laminas\Paginator;
 use Exception;
 
 /**
