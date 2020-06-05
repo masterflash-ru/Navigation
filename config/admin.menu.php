@@ -154,6 +154,11 @@ return [
                                              "label"=>"Порядок",
                                              "width"=>150,
                                          ]),
+                    ColModelHelper::options("options",
+                                         [
+                                             "label"=>"Опции",
+                                             "width"=>150,
+                                         ]),
 
                     ColModelHelper::hidden("id"),
                     ColModelHelper::cellActions("myaction",["formatoptions"=>["editformbutton"=>true]]),
