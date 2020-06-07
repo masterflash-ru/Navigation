@@ -158,6 +158,45 @@ return [
                                          [
                                              "label"=>"Опции",
                                              "width"=>150,
+                                             "hidden" => true,
+                                             "editrules"=>[
+                                                 "edithidden"=>true,
+                                             ],
+                                             "editoptions"=>[
+                                                 //тип сериализатора serialize или json (по умолчанию)
+                                                 'serialize' => 'json',
+                                                 /*собственно сами элементы, подобно Laminas формам*/
+                                                 "elements"=>[
+                                                     [
+                                                         'spec' =>[
+                                                             "type" => "select",
+                                                             "name" => "target",
+                                                             'options' => [
+                                                                 'label' => 'Цель',
+                                                                 'empty_option' => 'По умолчанию',
+                                                                 'value_options' => [
+                                                                     '_blank' => 'Новое окно',
+                                                                     '_top' => 'Главное окно',
+                                                                     '_self' => 'Текущее окно',
+                                                                     '_parent' => 'Родительское окно',
+                                                                 ],
+                                                             ],
+                                                         ],
+                                                     ],
+                                                     
+                                                     [
+                                                         'spec' =>[
+                                                             "type" => "text",
+                                                             "name" => "li_attribute",
+                                                             'options' => [
+                                                                 'label' => 'Атрибуты в li',
+                                                             ],
+                                                             'attributes'=> [
+                                                             ],
+                                                         ],
+                                                     ],
+                                                 ],
+                                             ],
                                          ]),
 
                     ColModelHelper::hidden("id"),
