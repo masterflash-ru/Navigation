@@ -187,14 +187,35 @@ return [
                                                      [
                                                          'spec' =>[
                                                              "type" => "text",
-                                                             "name" => "li_attribute",
+                                                             "name" => "li_class",
                                                              'options' => [
-                                                                 'label' => 'Атрибуты в li',
+                                                                 'label' => 'Класс CSS в <li>',
                                                              ],
                                                              'attributes'=> [
                                                              ],
                                                          ],
                                                      ],
+                                                     [
+                                                         'spec' =>[
+                                                             "type" => "text",
+                                                             "name" => "a_class",
+                                                             'options' => [
+                                                                 'label' => 'Класс CSS в <a>',
+                                                             ],
+                                                             'attributes'=> [
+                                                             ],
+                                                         ],
+                                                     ],
+                                                     [
+                                                        'spec' =>[
+                                                            "type" => "checkbox",
+                                                            "name" => "header",
+                                                            'options' => [
+                                                                'label' => 'Заголовок/разделитель',
+                                                            ],
+                                                        ],
+                                                    ],
+
                                                  ],
                                              ],
                                          ]),

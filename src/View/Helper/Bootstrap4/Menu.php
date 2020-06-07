@@ -80,6 +80,9 @@ class Menu extends LaminasMenu
         $prevDepth = -1;
         /** @var Mvc $page */
         foreach ($iterator as $page) {
+            //наши дополнительные опции
+            $_options=$page->get("options");
+            
             $depth = $iterator->getDepth();
             $isActive = $page->isActive(true);
             if ($depth < $minDepth || !$this->accept($page)) {
@@ -130,6 +133,9 @@ class Menu extends LaminasMenu
 
             // render li tag and page
             $liClasses = ['nav-item'];
+            if (!empty($_options["li_class"])){
+                $li_class[]=$_options["li_class"];
+            }
 
             // Is page active?
             if ($isActive) {
@@ -156,8 +162,8 @@ class Menu extends LaminasMenu
             }
 
             $html .= $myIndent
-                . ($depth === 0 ? '    <li' . $liClass . '>' : '')
-                . $myIndent . $this->htmlify($page, $escapeLabels, $depth > 0)
+                . ($depth === 0 ? '    <li' . $liClass .'>' : '')
+                . $myIndent . $this->htmlify($page, $escapeLabels, $depth > 0,$_options)
                 . PHP_EOL;
 
 
@@ -192,7 +198,7 @@ class Menu extends LaminasMenu
      * @param  bool $isChild Whether or not to add the page class to the list item
      * @return string
      */
-    public function htmlify(AbstractPage $page, $escapeLabel = true, $isChild = false)
+    public function htmlify(AbstractPage $page, $escapeLabel = true, $isChild = false,$options=[])
     {
         // get attribs for element
         $attribs = [
@@ -208,15 +214,25 @@ class Menu extends LaminasMenu
             $attribs['role'] = 'button';
             $class[] = 'dropdown-toggle';
         }
+        // does page have a href?
+        $href = $page->getHref();
 
         if ($isChild) {
-            $class[] = 'dropdown-item';
+            if (!empty($options["header"])){
+                $class[]='dropdown-header';
+                $href=null;
+            } else {
+                $class[] = 'dropdown-item';
+            }
         } else {
             $class[] = 'nav-link';
         }
+        
+        if (!empty($options["a_class"])){
+            $class[]=$options["a_class"];
+        }
 
-        // does page have a href?
-        $href = $page->getHref();
+
         if ($href) {
             $element = 'a';
             $attribs['href'] = $href;

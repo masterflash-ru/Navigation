@@ -169,9 +169,16 @@ public function getMenu($sysname,$locale)
         $array=[];
         while (!$rs->EOF){
             $r=[];
+            $_options=(array)json_decode($rs->Fields->Item["options"]->Value);
+            if (!empty($_options["target"])){
+                $r["target"]=$_options["target"];
+                unset($_options["target"]);
+            }
+            $r["options"]=$_options;
+            
             $r["id"]=$rs->Fields->Item["id"]->Value;
             $r["subid"]=$rs->Fields->Item["subid"]->Value;
-            
+
             $r["label"]=$rs->Fields->Item['label']->Value;
             if ($rs->Fields->Item['url']->Value){
                 //если указан URL тогда он ставится, MVC игнорируется
