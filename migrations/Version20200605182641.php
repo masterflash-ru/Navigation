@@ -13,7 +13,7 @@ class Version20200605182641 extends AbstractMigration implements MigrationInterf
     public function up($schema, $adapter)
     {
         $table = new Ddl\AlterTable("menu");
-        $table->addColumn(new Ddl\Column\Text('options', null,false,null,["COMMENT"=>"Опции в формате JSON"]));
+        $table->addColumn(new Ddl\Column\Text('options', null,true,null,["COMMENT"=>"Опции в формате JSON"]));
         $this->addSql($table);
     }
 
@@ -21,6 +21,6 @@ class Version20200605182641 extends AbstractMigration implements MigrationInterf
     {
         $table = new Ddl\AlterTable("menu");
         $table->dropColumn('options');
-        $this->addSql($drop);
+        $this->addSql($table);
     }
 }
